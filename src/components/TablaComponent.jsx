@@ -1,20 +1,17 @@
 import BuscadorComponent from "./BuscadorComponent";
 import { useState } from "react";
-const TablaComponent = ({personas}) => {
-  const [searchInput, setSearchInput] = useState("");
+const TablaComponent = ({Materias, searchInput, contador, handleSearch}) => {
+  
+    const filteredMaterias = Materias.filter((materia) =>
+    materia.areaConocimiento.toLowerCase().includes(searchInput.toLowerCase()) ||
+    materia.id.toLowerCase().includes(searchInput.toLowerCase()) ||
+    materia.descripcion.toLowerCase().includes(searchInput.toLowerCase())
+  ).slice(0, contador);
 
-  const handleSearch = (inputValue) => {
-    setSearchInput(inputValue);
-  };
-
-  const filteredPersonas = personas.filter((persona) =>
-    persona.areaConocimiento.toLowerCase().includes(searchInput.toLowerCase())
-    ||
-    persona.id.toLowerCase().includes(searchInput.toLowerCase())
-  );
     return (
     <div className="container">
-      <BuscadorComponent setSearch={handleSearch}/>
+     <BuscadorComponent setSearch={handleSearch} />
+
       <table className="table table-bordered">
         <thead className="table-dark">
           <tr>
@@ -25,11 +22,11 @@ const TablaComponent = ({personas}) => {
           </tr>
         </thead>
         <tbody>
-          {filteredPersonas.map((persona) =>(
-            <tr key={persona.id}>
-              <td>{persona.id}</td>
-              <td>{persona.areaConocimiento}</td>
-              <td>{persona.descripcion}</td>
+          {filteredMaterias.map((materia) =>(
+            <tr key={materia.id}>
+              <td>{materia.id}</td>
+              <td>{materia.areaConocimiento}</td>
+              <td>{materia.descripcion}</td>
             </tr>
           ))}
         </tbody>

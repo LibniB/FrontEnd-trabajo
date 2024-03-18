@@ -4,10 +4,14 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import TablaComponent from "./components/TablaComponent";
 import BuscadorComponent from "./components/BuscadorComponent";
+import RegistradorComponent from "./components/RegistradorComponent";
 
 
 function App() {
-  const Personas = [
+  const [searchInput, setSearchInput] = useState("");
+  const [contador, setContador] = useState(5);
+
+  const Materias = [
     {
       id: "1",
       areaConocimiento: "Matematicas",
@@ -125,27 +129,45 @@ function App() {
     }
 
   ];
-  const [searchInput, setSearchInput] = useState("");
+  
 
   const handleSearch = (inputValue) => {
-    setSearchInput(inputValue);
-};
+    if (inputValue) {
+      setSearchInput(inputValue.toLowerCase());
+    } else {
+      setSearchInput("");
+    }
+  };
 
-  let results = [];
-  if (!searchInput) {
-      results = Personas;
-  } else {
-      results = Personas.filter((dato) =>
-          dato.areaConocimiento.toLocaleLowerCase().includes(searchInput.toLowerCase()) 
-      );
+  const handleContador = (e)=>{
+    setContador(Number(e.target.value))
   }
-
+  const Contador = [5,10,15,20]
   
+  const filteredMaterias = Materias.filter(
+    (materia) =>
+      materia.id.toLowerCase().includes(searchInput.toLowerCase()) ||
+      materia.areaConocimiento.toLowerCase().includes(searchInput.toLowerCase()) ||
+      materia.descripcion.toLowerCase().includes(searchInput.toLowerCase())
+  ).slice(0, contador);
+
   return (
+
     <div>
-      
-      <TablaComponent personas={Personas} setSearch={setSearchInput}  />
-    </div>
+     <select value={contador} name="" id="" onChange={handleContador} className="ll">
+          {Contador.map((opcion)=>(
+          <option key={opcion} value={opcion}>{opcion}</option>
+          ))}
+        </select>  
+        
+
+        <TablaComponent Materias={Materias} searchInput={searchInput} contador={contador} handleSearch={handleSearch} />
+        <RegistradorComponent
+        Tableregistros={filteredMaterias.length}
+        Tablematerias={Materias.length}
+      ></RegistradorComponent>
+
+  </div>
   );
 }
 
